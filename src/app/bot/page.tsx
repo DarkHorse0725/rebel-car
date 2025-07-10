@@ -2,13 +2,13 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from 'next/navigation'
+import { Suspense } from 'react'
 
-import Image from "next/image";
 import { useChat } from "ai/react";
 import axios from "axios";
 import { PitGirls } from "../db/pitGirlsInfo";
 
-const ChatBot = () => {
+const Chat = () => {
     const searchParams = useSearchParams()
     const no = searchParams.get('no')
     const [loading, setLoading] = useState(false);
@@ -172,6 +172,14 @@ const ChatBot = () => {
         </div>
     );
 };
+
+const ChatBot = () => {
+  return (
+    <Suspense>
+      <Chat />
+    </Suspense>
+  )
+}
 
 export default ChatBot;
 
