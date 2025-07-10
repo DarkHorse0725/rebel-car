@@ -1,22 +1,33 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useSearchParams } from 'next/navigation'
 
 import Image from "next/image";
 import { useChat } from "ai/react";
 import axios from "axios";
+import { PitGirls } from "../db/pitGirlsInfo";
 
 const ChatBot = () => {
-
+    const searchParams = useSearchParams()
+    const no = searchParams.get('no')
     const [loading, setLoading] = useState(false);
     const [text, setText] = useState('')
+    const [PitGirl, setPitGirl] = useState<any>(null)
     const [generatedVideoUrl, setGeneratedVideoUrl] = useState<string[]>([]);
+    const [finalVideoUrl, setFinalVideoUrl] = useState("");
     const { messages, input, handleInputChange, handleSubmit, status, error } =
         useChat({
             api: "/api/openai",
         });
 
     const chatBodyRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (no) {
+            setPitGirl(PitGirls[parseInt(no)])
+        }
+    }, [no])
 
     useEffect(() => {
         const container = chatBodyRef.current;
@@ -32,19 +43,63 @@ const ChatBot = () => {
     const generateVideo = async (text: string) => {
         setLoading(true)
         const inputData = {
-            text: text
+            text: text,
+            pitGirlNo: no
         }
         const generatedVideo = await axios.post('/api/hedra', inputData);
         const tempUrls: string[] = [...generatedVideoUrl]
+        setFinalVideoUrl(generatedVideo.data as string)
         tempUrls.push(generatedVideo.data as string)
         setGeneratedVideoUrl(tempUrls)
         setLoading(false)
     }
 
+
+
     return (
-        <div className="flex p-10">
-            <div className="flex-1">
-                <div>
+        <div className="flex py-10">
+            {PitGirl && (
+                <div className="w-[350px]">
+                    <div className="w-full">
+                        {finalVideoUrl.length == 0 && (
+                            <img className="rounded-3xl" src={`assets/img/pitgirls/${PitGirl.url}`} alt="" />
+                        )}
+                        {loading === false && finalVideoUrl.length > 0 && (
+                            <video className="rounded-3xl w-full" src={finalVideoUrl} controls></video>
+                        )}
+                    </div>
+                    <div className="flex pt-5 items-center">
+                        <div className="flex w-[70px] h-[50px]">
+                            <img className="rounded-xl" src={`https://www.countryflags.com/wp-content/uploads/${PitGirl.nationality.toLowerCase()}-flag-png-large.png`} alt="flg" />
+                        </div>
+                        <div className="flex flex-col pl-2">
+                            <div className="flex text-white font-bold text-[24px]">
+                                <div className="">{PitGirl.name}</div>
+                            </div>
+                            <div className="flex text-white font-bold text-[16px]">
+                                <div className="">{PitGirl.age} YRS - {PitGirl.nationality.toUpperCase()}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="pt-5 text-white">
+                        <ul className="list-disc">
+                            <li>Age: {PitGirl.age}</li>
+                            <li>Height: {PitGirl.height}</li>
+                            <li>Location: {PitGirl.location}</li>
+                            <li>Character Traits: {PitGirl.character}</li>
+                            <li>Hobbies: {PitGirl.hobbies}</li>
+                            {PitGirl.job.length > 0 && (<li>Job: {PitGirl.job}</li>)}
+                        </ul>
+                    </div>
+                    <div className="pt-5 h-[300px] overflow-y-scroll">
+                        <div className="text-white">
+                            Height:{PitGirl.description}
+                        </div>
+                    </div>
+                </div>
+            )}
+            <div className="border-white rounded-4xl border-2 ml-10 w-full relative h-[calc(100vh - 300px)] overflow-y-auto">
+                <div className="">
                     <div ref={chatBodyRef} className="flex-1 overflow-y-auto p-4 space-y-4">
                         {messages.map((message) => (
                             <div
@@ -54,64 +109,66 @@ const ChatBot = () => {
                             >
                                 {/* Message bubble */}
                                 <div
-                                    className={`px-3 py-2 rounded-md max-w-[70%] break-words text-xl ${message.role === "user"
-                                        ? "bg-blue-500 text-white dark:bg-blue-600"
-                                        : "bg-gray-200 text-gray-800 dark:bg-gray-700 dark:text-gray-200"
+                                    className={`shadow-xs flex items-center justify-center px-3 py-2 rounded-4xl max-w-[70%] break-words text-xl text-white ${message.role === "user"
+                                        ? "bg-[linear-gradient(90deg,_#181414_30%,_#737373_100%)]"
+                                        : "bg-[linear-gradient(90deg,_#737373_30%,_#181414_100%)] "
                                         }`}
                                 >
-                                    {message.content}
+                                    {message.role !== "user" && (
+                                        <>
+                                            <div className="ml-3 w-[50px] h-[50px] rounded-4xl">
+                                                <img className="rounded-4xl min-w-[50px] min-h-[50px]" src={`assets/img/pitgirls/${PitGirl.url}`} alt="" />
+                                            </div>
+                                            <div className="ml-3">
+                                                {message.content}
+                                            </div></>
+                                    )}
+                                    {message.role === "user" && (
+                                        <>
+
+                                            <div className="mr-3">
+                                                {message.content}
+                                            </div>
+                                            <div className="mr-3 w-[50px] h-[50px] rounded-4xl">
+                                                <img className="rounded-4xl min-w-[50px] min-h-[50px]" src={`assets/img/user.jpg`} alt="" />
+                                            </div>
+                                        </>
+                                    )}
+
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
-                <div className="flex justify-center align-center gap-2">
-                    <form
-                        onSubmit={(e) => {
-                            e.preventDefault();
-                            handleSubmit();
-                        }}
-                        className="flex items-center border-t px-4 py-3 bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
-                    >
-                        <input
-                            className="shadow appearance-none border rounded w-[400px] py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            type="text"
-                            value={input}
-                            onChange={handleInputChange}
-                            placeholder="Type your message..."
-                            disabled={status === "streaming" || loading === true}
-                        ></input>
-                        <button
-                            type="submit"
-                            disabled={status === "streaming" || loading === true}
-                            className={`text-white ${status === "streaming" || loading === true ? 'bg-blue-400 hover:bg-blue-500 ' : 'bg-blue-700 hover:bg-blue-800' }focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800`}
+                <div className="absolute bottom-5 p-5 w-full">
+                    <div className="relative">
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                handleSubmit();
+                            }}
+                            className=""
                         >
-                            Send Message
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <div className="flex-1">
-                {loading == true && <div>Generating Video ...</div>}
-                <div className="flex w-full">
-                    <div className="flex-1">
-                        {loading == false && generatedVideoUrl.length > 0 && generatedVideoUrl.map((url, index) => (
-                            <div key={index} className="">
-
-                                <video src={url} controls></video>
-                                <p>download video url : <a href={url}>To download, click here</a></p>
-                            </div>
-                        ))}
-
-                        {generatedVideoUrl.length == 0 && (<Image src="/assets/001.png" width="500" height="500" alt="NFT image" />)}
-                    </div>
-                    <div className="flex-1 ml-2">
-                        <Image src="/assets/001.png" width="500" height="500" alt="NFT image" />
+                            <input
+                                className="shadow appearance-none border rounded-4xl w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline bg-[#2b2b2b] text-white h-[50px]"
+                                type="text"
+                                value={input}
+                                onChange={handleInputChange}
+                                placeholder="Enter text here"
+                                disabled={status === "streaming" || loading === true}
+                            ></input>
+                            <button
+                                type="submit"
+                                disabled={status === "streaming" || loading === true}
+                                className={`absolute right-5 top-2 bg-transparent w-[30px]`}
+                            >
+                                <img src="/assets/img/telegram_icon.png" alt="telegram icon" />
+                            </button>
+                        </form>
                     </div>
                 </div>
-
-
             </div>
+
         </div>
     );
 };

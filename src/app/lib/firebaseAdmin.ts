@@ -4,8 +4,8 @@ const serviceAccount = require("./serviceAccountKey.json");
 
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    storageBucket: "pit-storage.firebasestorage.app"
+    storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
 
 });
 
-export default admin;
+export const bucket = admin.storage().bucket();
