@@ -1,11 +1,11 @@
 const Header = () => {
     return (
-        <div className="flex justify-between">
+        <div className="flex justify-between items-center">
             <div className="flex">
                 <div className="w-[75.7442px] h-[53.0209px]">
                     <img className="w-full h-full" src="/assets/img/logo.png" alt="rebel car logo"/>
                 </div>
-                <div className="flex flex-col mt-[10px] ml-2">
+                <div className="hidden sm:flex sm:flex-col mt-[10px] ml-2">
                     <div className="font-bold text-red-600">
                         ReBEL CARS
                     </div>

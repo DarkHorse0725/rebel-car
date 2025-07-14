@@ -57,9 +57,9 @@ const Chat = () => {
 
 
     return (
-        <div className="flex py-10">
+        <div className="flex py-10 flex-col sm:flex-row">
             {PitGirl && (
-                <div className="w-[350px]">
+                <div className="w-[350px] m-auto">
                     <div className="w-full">
                         {finalVideoUrl.length == 0 && (
                             <img className="rounded-3xl" src={`assets/img/pitgirls/${PitGirl.url}`} alt="" />
@@ -81,7 +81,7 @@ const Chat = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="pt-5 text-white">
+                    <div className="hidden sm:pt-5 text-white">
                         <ul className="list-disc">
                             <li>Age: {PitGirl.age}</li>
                             <li>Height: {PitGirl.height}</li>
@@ -91,14 +91,14 @@ const Chat = () => {
                             {PitGirl.job.length > 0 && (<li>Job: {PitGirl.job}</li>)}
                         </ul>
                     </div>
-                    <div className="pt-5 h-[300px] overflow-y-scroll">
+                    <div className="hidden sm:pt-5 sm:h-[300px] sm:overflow-y-scroll">
                         <div className="text-white">
                             Height:{PitGirl.description}
                         </div>
                     </div>
                 </div>
             )}
-            <div className="border-white rounded-4xl border-2 ml-10 w-full relative h-[calc(100vh - 300px)] overflow-y-auto">
+            <div className="border-white rounded-4xl border-2 m-0 mt-5 sm:ml-10 w-full relative min-h-[500px] sm:h-[calc(100vh - 300px)] overflow-y-auto">
                 <div className="">
                     <div ref={chatBodyRef} className="flex-1 overflow-y-auto p-4 space-y-4">
                         {messages.map((message) => (
