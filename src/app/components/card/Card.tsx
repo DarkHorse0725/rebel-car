@@ -14,7 +14,7 @@ const Card = ({ userInfo, index }: { userInfo: Userinfo, index: number }) => {
                 <div className="absolute bottom-0 w-full align-middle text-center p-3">
                     <div className="flex">
                         <div className="flex w-[70px] h-[50px]">
-                            <img src={`https://www.countryflags.com/wp-content/uploads/${nationality.toLowerCase()}-flag-png-large.png`} alt="flg" />
+                            <img className="rounded-xl" src={`https://www.countryflags.com/wp-content/uploads/${nationality.toLowerCase()}-flag-png-large.png`} alt="flg" />
                         </div>
                         <div className="flex flex-col pl-1">
                             <div className="flex text-white font-bold text-[18px]">
