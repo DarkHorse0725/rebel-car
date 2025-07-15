@@ -5,8 +5,8 @@ import { PitGirls } from "../db/pitGirlsInfo"
 const Landing = () => {
 
     return (
-        <div className="mt-10">
-            <div className="grid w-fit m-auto grid-cols-1 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-5 gap-y-10">
+        <div className="mt-5 sm:mt-10">
+            <div className="grid w-fit m-auto grid-cols-2 2xl:grid-cols-5 xl:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-3 sm:gap-5 sm:gap-y-10">
                 {
                     PitGirls.map((row: any, index) => {
                         return (
