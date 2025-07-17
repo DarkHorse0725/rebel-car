@@ -99,8 +99,8 @@ const Chat = () => {
                     </div>
                 </div>
             )}
-            <div className=" m-0 mt-5 sm:mt-0 sm:ml-10 w-full relative h-[500px] sm:h-[calc(100vh_-_300px)] ">
-                <div ref={chatBodyRef} className="border-white rounded-4xl border-2 w-full relative h-[500px] sm:h-[calc(100vh_-_300px)] overflow-y-auto scroll-snap-y-container">
+            <div className=" m-0 mt-5 sm:mt-0 sm:ml-10 w-full relative h-[500px] sm:h-[calc(100vh_-_150px)] ">
+                <div ref={chatBodyRef} className="border-white rounded-4xl border-2 w-full relative h-[500px] sm:h-[calc(100vh_-_150px)] overflow-y-auto scroll-snap-y-container">
                     <div className="absolute right-0 w-[55%] h-[50%]">
                         <img className="w-full h-full" src={`assets/img/grid.png`} alt="grid" />
                     </div>
