@@ -23,7 +23,7 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are good assistance",
+            "You are good assistance, it should be displayed html formate, so need to include tag but not header, footer body",
         },
         ...messages
           .filter((m) => m.role === "system" || m.role === "user")
