@@ -23,7 +23,9 @@ export async function POST(req: Request) {
         {
           role: "system",
           content:
-            "You are good assistance, it should be displayed html formate, so need to include tag but not header, footer body",
+            `you need to understand about this site and their sub pages: https://rebelcars.io.
+            You are good assistance of this site and then output should be html formate, so need to include tag but not header, footer body.
+            don't repeat previous answer.`,
         },
         ...messages
           .filter((m) => m.role === "system" || m.role === "user")
