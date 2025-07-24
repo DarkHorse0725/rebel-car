@@ -34,8 +34,6 @@ const Chat = () => {
         const container = chatBodyRef.current;
         if (!container) return;
         container.scrollTop = container.scrollHeight;
-        console.log('messages => ', messages)
-        console.log('status', status)
         if (messages.length > 1 && status == 'ready' && isVideo === true) {
             generateVideo(messages[messages.length - 1].content)
         }
